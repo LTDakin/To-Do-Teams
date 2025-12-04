@@ -1,0 +1,22 @@
+{
+  "name": "team-do-monorepo",
+  "version": "1.0.0",
+  "description": "Monorepo for Team-Do React Frontend and NestJS Backend",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm run build:all",
+    "start:fe": "npm start --workspace=frontend",
+    "start:be": "npm run start:dev --workspace=backend",
+    "start:all": "concurrently \"npm run start:fe\" \"npm run start:be\"",
+    "build:fe": "npm run build --workspace=frontend",
+    "build:be": "npm run build --workspace=backend",
+    "build:packages": "npm workspaces foreach --no-private npm run build"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
