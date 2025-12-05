@@ -1,38 +1,39 @@
+import { z } from "zod";
 /**
- * 1. USER INTERFACES
- * What the API returns after successful login or profile fetch.
+ * Team Do Types
+ * Shared types and schemas between the server and client
+ * Using Zod for schema definitions and validation
+ * Schemas defined here can be used for runtime validation as well as TypeScript type inference
+ * Schemas:
+ * 1. User Schema
+ * 2. Todo Schema
+ * 3. Create Todo Payload Schema
  */
-export interface UserDto {
-    id: string;
-    email: string;
-    username: string;
-    // An array of user IDs this user has shared their todos with, or vice versa
-    sharedUserIds: string[]; 
-}
 
-/**
- * 2. TODO INTERFACES
- * The core data structure for a single to-do item.
- */
-export interface TodoDto {
-    id: string;
-    title: string;
-    description?: string;
-    completed: boolean;
-    ownerId: string;
-    // IDs of users this specific todo is shared with
-    sharedWithUserIds: string[]; 
-    createdAt: Date;
-    updatedAt: Date;
-}
+// 1. USER SCHEMA
+export const UserSchema = z.object({
+  id: z.string(),
+  email: z.email(),
+  username: z.string(),
+  sharedUserIds: z.array(z.string()),
+});
+export type UserDto = z.infer<typeof UserSchema>;
 
-/**
- * 3. API PAYLOAD INTERFACE (Example)
- * The data structure for creating a new todo item.
- */
-export interface CreateTodoPayload {
-    title: string;
-    description?: string;
-    // When creating a todo, the user might specify who to share it with
-    shareWithUsernames?: string[]; 
-}
+// 2. TODO SCHEMA
+export const TodoSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  completed: z.boolean(),
+  ownerId: z.string(),
+  sharedWithUserIds: z.array(z.string()),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});
+export type TodoDto = z.infer<typeof TodoSchema>;
+
+// 3. CREATE TODO PAYLOAD SCHEMA
+export const CreateTodoPayloadSchema = z.object({
+  title: z.string(),
+  shareWithUsernames: z.array(z.string()).optional(),
+});
+export type CreateTodoPayload = z.infer<typeof CreateTodoPayloadSchema>;
