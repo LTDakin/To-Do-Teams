@@ -13,7 +13,6 @@ import { z } from "zod";
 // 1. USER SCHEMA
 export const UserSchema = z.object({
   id: z.string(),
-  email: z.email(),
   username: z.string(),
   sharedUserIds: z.array(z.string()),
 });
