@@ -7,7 +7,6 @@ type MenuItem = Required<MenuProps>['items'][number];
 const todoActionMenu: MenuItem[] = [
   {
     key: 'todo-actions',
-    icon: <EllipsisOutlined/>,
     children: [
       {
         key: 'edit',
@@ -62,9 +61,9 @@ const menuClick: MenuProps['onClick'] = (e) => {
 
 export default function TodoItem({ todo }: { todo: TodoDto }){
   return (
-    <div>
+    <div className="text-teal-900">
       <Checkbox className={todo.id} onChange={checkBoxChange} checked={todo.completed}>{todo.title}</Checkbox>
-      <Menu onClick={menuClick} mode="vertical" items={todoActionMenu} />
+      <Menu onClick={menuClick} mode="vertical" items={todoActionMenu}/>
     </div>
   );
 }
