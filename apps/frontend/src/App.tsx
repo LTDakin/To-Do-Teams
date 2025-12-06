@@ -1,17 +1,12 @@
 import React from 'react';
 import './App.css';
-import { Checkbox } from 'antd';
+import TodoListPage from './Pages/to-do-list/todo-list-page';
 
 function App() {
   return (
     <div className="App">
       <div>
-        <h1>ToDo's</h1>
-        <Checkbox checked={true} >Sample ToDo Item</Checkbox>
-        <Checkbox checked={true} >Sample ToDo Item</Checkbox>
-        <Checkbox checked={true} >Sample ToDo Item</Checkbox>
-        <Checkbox checked={true} >Sample ToDo Item</Checkbox>
-        <Checkbox checked={true} >Sample ToDo Item</Checkbox>
+        <TodoListPage />
       </div>
     </div>
   );
