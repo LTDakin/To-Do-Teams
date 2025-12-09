@@ -5,20 +5,29 @@ import { z } from "zod";
  * Using Zod for schema definitions and validation
  * Schemas defined here can be used for runtime validation as well as TypeScript type inference
  * Schemas:
- * 1. User Schema
- * 2. Todo Schema
- * 3. Create Todo Payload Schema
+ *  User Schema
+ *  Signin Schema
+ *  Todo Schema
+ *  Create Todo Payload Schema
  */
 
-// 1. USER SCHEMA
+// USER SCHEMA
 export const UserSchema = z.object({
   id: z.string(),
   username: z.string(),
+  passwordHash: z.string(),
   sharedUserIds: z.array(z.string()),
 });
 export type UserDto = z.infer<typeof UserSchema>;
 
-// 2. TODO SCHEMA
+// SIGNIN SCHEMA
+export const SigninSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});
+export type SigninDto = z.infer<typeof SigninSchema>;
+
+// TODO SCHEMA
 export const TodoSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -30,7 +39,7 @@ export const TodoSchema = z.object({
 });
 export type TodoDto = z.infer<typeof TodoSchema>;
 
-// 3. CREATE TODO PAYLOAD SCHEMA
+// CREATE TODO PAYLOAD SCHEMA
 export const CreateTodoPayloadSchema = z.object({
   title: z.string(),
   shareWithUsernames: z.array(z.string()).optional(),
