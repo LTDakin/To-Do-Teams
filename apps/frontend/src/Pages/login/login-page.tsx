@@ -1,14 +1,15 @@
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, InputRef } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { Button, Card, Form, Input } from "antd";
+import { SigninSchema, SigninDto } from '../../../../../packages/team-do-types/src/index';
 
 export default function LoginPage() {
   const [form] = Form.useForm();
 
   const attemptLogin = (values: {username: string, password: string}) => {
-    // TODO create Zod schema for logins
-    // TODO use that login schema to validate username and password
-    console.log("Attempting login with", values.username, values.password);
+    // validate input using Zod schema
+    const signinValue: SigninDto = SigninSchema.parse(values);
+    console.log("Attempting login with", signinValue);
+
   };
 
   return (
