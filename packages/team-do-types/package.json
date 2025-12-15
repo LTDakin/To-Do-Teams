@@ -1,9 +1,8 @@
 {
-  "name": "team-do-types",
+  "name": "@team-do/types",
   "version": "1.0.0",
   "description": "Shared TypeScript definitions for the Team-Do app.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "src/",
   "scripts": {
     "build": "tsc"
   },

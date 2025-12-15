@@ -1,6 +1,6 @@
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input } from "antd";
-import { SigninSchema, SigninDto } from '../../../../../packages/team-do-types/src/index';
+import { SigninSchema, SigninDto } from '@team-do/types';
 
 export default function LoginPage() {
   const [form] = Form.useForm();

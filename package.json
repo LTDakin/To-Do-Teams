@@ -1,12 +1,15 @@
 {
   "name": "team-do-monorepo",
   "version": "1.0.0",
+  "author": "LTDakin",
+  "license": "GPL-3.0-only",
   "description": "Monorepo for Team-Do React Frontend and NestJS Backend",
+  "repository": "https://github.com/LTDakin/To-Do-Teams",
   "private": true,
   "scripts": {
-    "postinstall": "npm run build:packages",
     "start:fe": "npm run dev --workspace=frontend",
     "start:be": "npm run start:dev --workspace=backend",
+    "start:db": "docker-compose up -d db",
     "build:fe": "npm run build --workspace=frontend",
     "build:be": "npm run build --workspace=backend",
     "build:packages": "npm workspaces foreach --no-private npm run build"
