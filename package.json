@@ -10,6 +10,7 @@
     "start:fe": "npm run dev --workspace=frontend",
     "start:be": "npm run start:dev --workspace=backend",
     "start:db": "docker-compose up -d db",
+    "update:db": "npm run push --workspace=@team-do/db",
     "build:fe": "npm run build --workspace=frontend",
     "build:be": "npm run build --workspace=backend",
     "build:packages": "npm workspaces foreach --no-private npm run build"

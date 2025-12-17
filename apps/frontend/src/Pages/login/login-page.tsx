@@ -1,21 +1,14 @@
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input } from "antd";
-import { SigninSchema, SigninDto } from '@team-do/types';
+import { signin, signup } from '../../services/authService'
 
 export default function LoginPage() {
   const [form] = Form.useForm();
 
-  const attemptLogin = (values: {username: string, password: string}) => {
-    // validate input using Zod schema
-    const signinValue: SigninDto = SigninSchema.parse(values);
-    console.log("Attempting login with", signinValue);
-
-  };
-
   return (
     <div>
-      <Card className="w-64" title="Team-Do" variant="borderless">
-        <Form form={form} onFinish={attemptLogin}>
+      <Card className="w-64" title="🗒️ Team-Do" variant="borderless">
+        <Form form={form} onFinish={signin}>
           <Form.Item 
             name="username" 
             rules={[{required: true, message: "Please enter your username"}]}
@@ -32,6 +25,7 @@ export default function LoginPage() {
             <Button type="primary" block size="large" htmlType="submit" value={"Login"}>Login</Button>
           </Form.Item>
         </Form>
+        <Button type="default" block size="large" onClick={() => signup(form.getFieldsValue())}>Create Account</Button>
       </Card>
     </div>
   );

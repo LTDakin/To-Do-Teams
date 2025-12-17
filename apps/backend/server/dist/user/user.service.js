@@ -8,7 +8,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
 const common_1 = require("@nestjs/common");
+const drizzle_orm_1 = require("drizzle-orm");
+const db_1 = require("@team-do/db");
 let UserService = class UserService {
+    findAllUsers() {
+        return db_1.db.select().from(db_1.usersTable);
+    }
+    findUserByUsername(username) {
+        return db_1.db
+            .select()
+            .from(db_1.usersTable)
+            .where((0, drizzle_orm_1.eq)(db_1.usersTable.username, username));
+    }
+    findUserById(id) {
+        return db_1.db.select().from(db_1.usersTable).where((0, drizzle_orm_1.eq)(db_1.usersTable.id, id));
+    }
+    signin(signInDto) {
+        return db_1.db
+            .select()
+            .from(db_1.usersTable)
+            .where((0, drizzle_orm_1.eq)(db_1.usersTable.username, signInDto.username));
+    }
+    signup(newUserData) {
+        const newUser = {
+            username: newUserData.username,
+            passwordHash: newUserData.password,
+        };
+        console.log(newUser);
+        return db_1.db.insert(db_1.usersTable).values(newUser);
+    }
 };
 exports.UserService = UserService;
 exports.UserService = UserService = __decorate([
