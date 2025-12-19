@@ -1,5 +1,10 @@
-export declare class UserService {
-    findAllUsers(): import("drizzle-orm/pg-core").PgSelectBase<"users", {
+import { Pool } from "pg";
+import "dotenv/config";
+export * from "drizzle-orm";
+export declare const users: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "users";
+    schema: undefined;
+    columns: {
         id: import("drizzle-orm/pg-core").PgColumn<{
             name: "id";
             tableName: "users";
@@ -85,16 +90,16 @@ export declare class UserService {
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-    }, "single", Record<"users", "not-null">, false, never, {
-        id: number;
-        username: string;
-        passwordHash: string;
-        createdAt: Date;
-        updatedAt: Date;
-    }[], {
+    };
+    dialect: "pg";
+}>;
+export declare const todos: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "todos";
+    schema: undefined;
+    columns: {
         id: import("drizzle-orm/pg-core").PgColumn<{
             name: "id";
-            tableName: "users";
+            tableName: "todos";
             dataType: "number";
             columnType: "PgSerial";
             data: number;
@@ -109,9 +114,9 @@ export declare class UserService {
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        username: import("drizzle-orm/pg-core").PgColumn<{
-            name: "name";
-            tableName: "users";
+        title: import("drizzle-orm/pg-core").PgColumn<{
+            name: "title";
+            tableName: "todos";
             dataType: "string";
             columnType: "PgText";
             data: string;
@@ -126,26 +131,43 @@ export declare class UserService {
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        passwordHash: import("drizzle-orm/pg-core").PgColumn<{
-            name: "password_hash";
-            tableName: "users";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
+        completed: import("drizzle-orm/pg-core").PgColumn<{
+            name: "completed";
+            tableName: "todos";
+            dataType: "boolean";
+            columnType: "PgBoolean";
+            data: boolean;
+            driverParam: boolean;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        ownerId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "owner_id";
+            tableName: "todos";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
+            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
         createdAt: import("drizzle-orm/pg-core").PgColumn<{
             name: "created_at";
-            tableName: "users";
+            tableName: "todos";
             dataType: "date";
             columnType: "PgTimestamp";
             data: Date;
@@ -162,7 +184,7 @@ export declare class UserService {
         }, {}, {}>;
         updatedAt: import("drizzle-orm/pg-core").PgColumn<{
             name: "updated_at";
-            tableName: "users";
+            tableName: "todos";
             dataType: "date";
             columnType: "PgTimestamp";
             data: Date;
@@ -177,163 +199,80 @@ export declare class UserService {
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-    }>;
-    signin(signInDto: {
-        username: string;
-        password: string;
-    }): Omit<import("drizzle-orm/pg-core").PgSelectBase<"users", {
-        id: import("drizzle-orm/pg-core").PgColumn<{
-            name: "id";
-            tableName: "users";
+    };
+    dialect: "pg";
+}>;
+export declare const userSharesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "user_shares";
+    schema: undefined;
+    columns: {
+        sharerId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "sharer_id";
+            tableName: "user_shares";
             dataType: "number";
-            columnType: "PgSerial";
+            columnType: "PgInteger";
             data: number;
-            driverParam: number;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        username: import("drizzle-orm/pg-core").PgColumn<{
-            name: "name";
-            tableName: "users";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
+            driverParam: string | number;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        passwordHash: import("drizzle-orm/pg-core").PgColumn<{
-            name: "password_hash";
-            tableName: "users";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
-            notNull: true;
-            hasDefault: false;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        createdAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "created_at";
-            tableName: "users";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
             enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        updatedAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "updated_at";
-            tableName: "users";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-    }, "single", Record<"users", "not-null">, false, "where", {
-        id: number;
-        username: string;
-        passwordHash: string;
-        createdAt: Date;
-        updatedAt: Date;
-    }[], {
-        id: import("drizzle-orm/pg-core").PgColumn<{
-            name: "id";
-            tableName: "users";
+        shareeId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "sharee_id";
+            tableName: "user_shares";
             dataType: "number";
-            columnType: "PgSerial";
+            columnType: "PgInteger";
             data: number;
-            driverParam: number;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: true;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-        username: import("drizzle-orm/pg-core").PgColumn<{
-            name: "name";
-            tableName: "users";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
+            driverParam: string | number;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
+            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        passwordHash: import("drizzle-orm/pg-core").PgColumn<{
-            name: "password_hash";
-            tableName: "users";
-            dataType: "string";
-            columnType: "PgText";
-            data: string;
-            driverParam: string;
+    };
+    dialect: "pg";
+}>;
+export declare const todoSharesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+    name: "todo_shares";
+    schema: undefined;
+    columns: {
+        todoId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "todo_id";
+            tableName: "todo_shares";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
             notNull: true;
             hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
-            enumValues: [string, ...string[]];
+            enumValues: undefined;
             baseColumn: never;
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        createdAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "created_at";
-            tableName: "users";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
+        userId: import("drizzle-orm/pg-core").PgColumn<{
+            name: "user_id";
+            tableName: "todo_shares";
+            dataType: "number";
+            columnType: "PgInteger";
+            data: number;
+            driverParam: string | number;
             notNull: true;
-            hasDefault: true;
+            hasDefault: false;
             isPrimaryKey: false;
             isAutoincrement: false;
             hasRuntimeDefault: false;
@@ -342,28 +281,11 @@ export declare class UserService {
             identity: undefined;
             generated: undefined;
         }, {}, {}>;
-        updatedAt: import("drizzle-orm/pg-core").PgColumn<{
-            name: "updated_at";
-            tableName: "users";
-            dataType: "date";
-            columnType: "PgTimestamp";
-            data: Date;
-            driverParam: string;
-            notNull: true;
-            hasDefault: true;
-            isPrimaryKey: false;
-            isAutoincrement: false;
-            hasRuntimeDefault: false;
-            enumValues: undefined;
-            baseColumn: never;
-            identity: undefined;
-            generated: undefined;
-        }, {}, {}>;
-    }>, "where">;
-    signup(signUpDto: {
-        username: string;
-        password: string;
-    }): import("drizzle-orm/pg-core").PgInsertBase<import("drizzle-orm/pg-core").PgTableWithColumns<{
+    };
+    dialect: "pg";
+}>;
+export declare const db: import("drizzle-orm/node-postgres").NodePgDatabase<{
+    users: import("drizzle-orm/pg-core").PgTableWithColumns<{
         name: "users";
         schema: undefined;
         columns: {
@@ -454,5 +376,198 @@ export declare class UserService {
             }, {}, {}>;
         };
         dialect: "pg";
-    }>, import("drizzle-orm/node-postgres").NodePgQueryResultHKT, undefined, undefined, false, never>;
-}
+    }>;
+    todos: import("drizzle-orm/pg-core").PgTableWithColumns<{
+        name: "todos";
+        schema: undefined;
+        columns: {
+            id: import("drizzle-orm/pg-core").PgColumn<{
+                name: "id";
+                tableName: "todos";
+                dataType: "number";
+                columnType: "PgSerial";
+                data: number;
+                driverParam: number;
+                notNull: true;
+                hasDefault: true;
+                isPrimaryKey: true;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            title: import("drizzle-orm/pg-core").PgColumn<{
+                name: "title";
+                tableName: "todos";
+                dataType: "string";
+                columnType: "PgText";
+                data: string;
+                driverParam: string;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: [string, ...string[]];
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            completed: import("drizzle-orm/pg-core").PgColumn<{
+                name: "completed";
+                tableName: "todos";
+                dataType: "boolean";
+                columnType: "PgBoolean";
+                data: boolean;
+                driverParam: boolean;
+                notNull: true;
+                hasDefault: true;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            ownerId: import("drizzle-orm/pg-core").PgColumn<{
+                name: "owner_id";
+                tableName: "todos";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            createdAt: import("drizzle-orm/pg-core").PgColumn<{
+                name: "created_at";
+                tableName: "todos";
+                dataType: "date";
+                columnType: "PgTimestamp";
+                data: Date;
+                driverParam: string;
+                notNull: true;
+                hasDefault: true;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            updatedAt: import("drizzle-orm/pg-core").PgColumn<{
+                name: "updated_at";
+                tableName: "todos";
+                dataType: "date";
+                columnType: "PgTimestamp";
+                data: Date;
+                driverParam: string;
+                notNull: true;
+                hasDefault: true;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+        };
+        dialect: "pg";
+    }>;
+    userSharesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+        name: "user_shares";
+        schema: undefined;
+        columns: {
+            sharerId: import("drizzle-orm/pg-core").PgColumn<{
+                name: "sharer_id";
+                tableName: "user_shares";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            shareeId: import("drizzle-orm/pg-core").PgColumn<{
+                name: "sharee_id";
+                tableName: "user_shares";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+        };
+        dialect: "pg";
+    }>;
+    todoSharesTable: import("drizzle-orm/pg-core").PgTableWithColumns<{
+        name: "todo_shares";
+        schema: undefined;
+        columns: {
+            todoId: import("drizzle-orm/pg-core").PgColumn<{
+                name: "todo_id";
+                tableName: "todo_shares";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+            userId: import("drizzle-orm/pg-core").PgColumn<{
+                name: "user_id";
+                tableName: "todo_shares";
+                dataType: "number";
+                columnType: "PgInteger";
+                data: number;
+                driverParam: string | number;
+                notNull: true;
+                hasDefault: false;
+                isPrimaryKey: false;
+                isAutoincrement: false;
+                hasRuntimeDefault: false;
+                enumValues: undefined;
+                baseColumn: never;
+                identity: undefined;
+                generated: undefined;
+            }, {}, {}>;
+        };
+        dialect: "pg";
+    }>;
+}> & {
+    $client: Pool;
+};

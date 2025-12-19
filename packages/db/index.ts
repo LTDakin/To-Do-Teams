@@ -1,3 +1,5 @@
+import { drizzle } from "drizzle-orm/node-postgres";
+import { Pool } from "pg";
 import {
   boolean,
   integer,
@@ -7,9 +9,12 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import "dotenv/config";
+
+export * from "drizzle-orm";
 
 // Schema that models the users table
-export const usersTable = pgTable("users", {
+export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   username: text("name").notNull(),
   passwordHash: text("password_hash").notNull(),
@@ -18,12 +23,12 @@ export const usersTable = pgTable("users", {
 });
 
 // Schema that models the todos table, points a todo to a user as an owner
-export const todosTable = pgTable("todos", {
+export const todos = pgTable("todos", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   completed: boolean("completed").default(false).notNull(),
   ownerId: integer("owner_id")
-    .references(() => usersTable.id)
+    .references(() => users.id)
     .notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -35,10 +40,10 @@ export const userSharesTable = pgTable(
   {
     sharerId: integer("sharer_id")
       .notNull()
-      .references(() => usersTable.id),
+      .references(() => users.id),
     shareeId: integer("sharee_id")
       .notNull()
-      .references(() => usersTable.id),
+      .references(() => users.id),
   },
   (table) => [
     // ensures we have no duplicate relationships in the table by creating a composite primary key
@@ -52,13 +57,27 @@ export const todoSharesTable = pgTable(
   {
     todoId: integer("todo_id")
       .notNull()
-      .references(() => todosTable.id),
+      .references(() => todos.id),
     userId: integer("user_id")
       .notNull()
-      .references(() => usersTable.id),
+      .references(() => users.id),
   },
   (table) => [
     // ensures we have no duplicate relationships in the table by creating a composite primary key
     primaryKey({ columns: [table.todoId, table.userId] }),
   ]
 );
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
+
+export const db = drizzle(pool, {
+  schema: {
+    users,
+    todos,
+    userSharesTable,
+    todoSharesTable,
+  },
+  logger: true, // Optional: Enable logging for debugging
+});

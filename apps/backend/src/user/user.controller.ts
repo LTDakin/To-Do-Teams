@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 
 // /user endpoint
@@ -11,23 +11,13 @@ export class UserController {
     return this.userService.findAllUsers();
   }
 
-  @Get(':username')
-  findUserByUsername(@Param('username') username: string) {
-    return this.userService.findUserByUsername(username);
-  }
-
-  @Get(':id')
-  findUserById(@Param('id') id: number) {
-    return this.userService.findUserById(id);
-  }
-
   @Post('signup')
-  signup(@Body() signupDto) {
+  signup(@Body() signupDto: { username: string; password: string }) {
     return this.userService.signup(signupDto);
   }
 
   @Post('signin')
-  signin(@Body() signinDto) {
+  signin(@Body() signinDto: { username: string; password: string }) {
     try {
       return this.userService.signin(signinDto);
     } catch (error) {

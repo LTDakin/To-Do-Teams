@@ -23,12 +23,6 @@ let UserController = class UserController {
     findAllUsers() {
         return this.userService.findAllUsers();
     }
-    findUserByUsername(username) {
-        return this.userService.findUserByUsername(username);
-    }
-    findUserById(id) {
-        return this.userService.findUserById(id);
-    }
     signup(signupDto) {
         return this.userService.signup(signupDto);
     }
@@ -48,20 +42,6 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findAllUsers", null);
-__decorate([
-    (0, common_1.Get)(':username'),
-    __param(0, (0, common_1.Param)('username')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "findUserByUsername", null);
-__decorate([
-    (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id')),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
-], UserController.prototype, "findUserById", null);
 __decorate([
     (0, common_1.Post)('signup'),
     __param(0, (0, common_1.Body)()),

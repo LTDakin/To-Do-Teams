@@ -1,38 +1,28 @@
-import { Injectable } from '@nestjs/common'; // TODO move this into its own module to be injected into other services in a nestjs way
-import { eq } from 'drizzle-orm';
-import { usersTable, db } from '@team-do/db';
+import { Injectable } from '@nestjs/common';
+import { users, db, eq } from '@team-do/db'; // TODO move this into its own module to be injected into other services in a nestjs way
+
+type insertUsersSchema = typeof users.$inferInsert;
 
 @Injectable()
 export class UserService {
   findAllUsers() {
-    return db.select().from(usersTable);
+    return db.select().from(users);
   }
 
-  findUserByUsername(username: string) {
-    return db
+  signin(signInDto: { username: string; password: string }) {
+    const result = db
       .select()
-      .from(usersTable)
-      .where(eq(usersTable.username, username));
+      .from(users)
+      .where(eq(users.username, signInDto.username));
+
+    return result;
   }
 
-  findUserById(id: number) {
-    return db.select().from(usersTable).where(eq(usersTable.id, id));
-  }
-
-  signin(signInDto) {
-    return db
-      .select()
-      .from(usersTable)
-      .where(eq(usersTable.username, signInDto.username));
-  }
-
-  signup(newUserData) {
-    type insertUserTableSchema = typeof usersTable.$inferInsert;
-    const newUser: insertUserTableSchema = {
-      username: newUserData.username,
-      passwordHash: newUserData.password,
+  signup(signUpDto: { username: string; password: string }) {
+    const newUserEntry: insertUsersSchema = {
+      username: signUpDto.username,
+      passwordHash: signUpDto.password,
     };
-    console.log(newUser);
-    return db.insert(usersTable).values(newUser);
+    return db.insert(users).values(newUserEntry);
   }
 }
