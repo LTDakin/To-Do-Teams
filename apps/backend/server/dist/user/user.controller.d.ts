@@ -2,7 +2,7 @@ import { UserService } from './user.service';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
-    findAllUsers(): import("drizzle-orm/pg-core").PgSelectBase<"users", {
+    findAll(): import("drizzle-orm/pg-core").PgSelectBase<"users", {
         id: import("drizzle-orm/pg-core").PgColumn<{
             name: "id";
             tableName: "users";

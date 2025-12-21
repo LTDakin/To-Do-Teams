@@ -6,7 +6,7 @@ type signInDto = {
 export declare class UserService {
     private jwtService;
     constructor(jwtService: JwtService);
-    findAllUsers(): import("drizzle-orm/pg-core").PgSelectBase<"users", {
+    findAll(): import("drizzle-orm/pg-core").PgSelectBase<"users", {
         id: import("drizzle-orm/pg-core").PgColumn<{
             name: "id";
             tableName: "users";
@@ -185,6 +185,13 @@ export declare class UserService {
             generated: undefined;
         }, {}, {}>;
     }>;
+    findOne(username: string): Promise<{
+        id: number;
+        username: string;
+        passwordHash: string;
+        createdAt: Date;
+        updatedAt: Date;
+    }[]>;
     signin(signInDto: signInDto): Promise<{
         accessToken: string;
     }>;

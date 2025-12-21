@@ -22,31 +22,36 @@ let UserService = class UserService {
     constructor(jwtService) {
         this.jwtService = jwtService;
     }
-    findAllUsers() {
+    findAll() {
         return db_1.db.select().from(db_1.users);
     }
+    async findOne(username) {
+        return await db_1.db.select().from(db_1.users).where((0, db_1.eq)(db_1.users.username, username));
+    }
     async signin(signInDto) {
-        const result = db_1.db
+        const result = await db_1.db
             .select()
             .from(db_1.users)
             .where((0, db_1.eq)(db_1.users.username, signInDto.username));
-        console.log('result', result);
-        if (!bcryptjs_1.default.compareSync(signInDto.password, 'result.passwordHash')) {
+        if (!bcryptjs_1.default.compareSync(signInDto.password, result[0].passwordHash)) {
             throw new common_1.UnauthorizedException();
         }
-        console.log('Password is correct');
-        console.log('typeof signin', typeof result);
-        return { accessToken: await this.jwtService.signAsync('test') };
+        const payload = { sub: 'userId', username: 'placeholder_username' };
+        return { accessToken: await this.jwtService.signAsync(payload) };
     }
     async signup(signUpDto) {
+        const existingUser = await this.findOne(signUpDto.username);
+        if (existingUser.length > 0) {
+            throw new common_1.UnauthorizedException('Username already exists');
+        }
         const hashedPass = bcryptjs_1.default.hashSync(signUpDto.password, 10);
         const newUserEntry = {
             username: signUpDto.username,
             passwordHash: hashedPass,
         };
-        const result = db_1.db.insert(db_1.users).values(newUserEntry);
-        console.log('typeof signup', typeof result);
-        return { accessToken: await this.jwtService.signAsync('test') };
+        const result = await db_1.db.insert(db_1.users).values(newUserEntry).returning();
+        const payload = { sub: result[0].id, username: result[0].username };
+        return { accessToken: await this.jwtService.signAsync(payload) };
     }
 };
 exports.UserService = UserService;

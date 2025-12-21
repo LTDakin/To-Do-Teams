@@ -13,41 +13,45 @@ type signInDto = {
 export class UserService {
   constructor(private jwtService: JwtService) {}
 
-  findAllUsers() {
+  findAll() {
     return db.select().from(users);
   }
 
+  async findOne(username: string) {
+    return await db.select().from(users).where(eq(users.username, username));
+  }
+
   async signin(signInDto: signInDto): Promise<{ accessToken: string }> {
-    const result = db
+    const result = await db
       .select()
       .from(users)
       .where(eq(users.username, signInDto.username));
 
-    console.log('result', result);
-
-    // TODO figure out what the passwordHash should be for this result object
-    if (!bcrypt.compareSync(signInDto.password, 'result.passwordHash')) {
+    if (!bcrypt.compareSync(signInDto.password, result[0].passwordHash)) {
       throw new UnauthorizedException();
     }
 
-    console.log('Password is correct');
-    console.log('typeof signin', typeof result);
-    // return a JWT to sign them in
-    return { accessToken: await this.jwtService.signAsync('test') };
+    const payload = { sub: 'userId', username: 'placeholder_username' };
+    return { accessToken: await this.jwtService.signAsync(payload) };
   }
 
   async signup(signUpDto: signInDto): Promise<{ accessToken: string }> {
-    // hash plaintext password with bcryptjs
+    // We don't allow users with the same username
+    const existingUser = await this.findOne(signUpDto.username);
+
+    if (existingUser.length > 0) {
+      throw new UnauthorizedException('Username already exists');
+    }
+
     const hashedPass = bcrypt.hashSync(signUpDto.password, 10);
-    // add to db
     const newUserEntry: insertUsersSchema = {
       username: signUpDto.username,
       passwordHash: hashedPass,
     };
-    const result = db.insert(users).values(newUserEntry);
 
-    console.log('typeof signup', typeof result);
-    // return a JWT to sign them in
-    return { accessToken: await this.jwtService.signAsync('test') };
+    const result = await db.insert(users).values(newUserEntry).returning();
+
+    const payload = { sub: result[0].id, username: result[0].username };
+    return { accessToken: await this.jwtService.signAsync(payload) };
   }
 }
