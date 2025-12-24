@@ -192,11 +192,7 @@ export declare class UserService {
         createdAt: Date;
         updatedAt: Date;
     }[]>;
-    signin(signInDto: signInDto): Promise<{
-        accessToken: string;
-    }>;
-    signup(signUpDto: signInDto): Promise<{
-        accessToken: string;
-    }>;
+    signin(signInDto: signInDto): Promise<any>;
+    signup(signUpDto: signInDto): Promise<any>;
 }
 export {};

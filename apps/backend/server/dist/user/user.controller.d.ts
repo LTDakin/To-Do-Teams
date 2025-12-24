@@ -184,13 +184,9 @@ export declare class UserController {
     signup(signupDto: {
         username: string;
         password: string;
-    }): Promise<{
-        accessToken: string;
-    }>;
+    }): Promise<any>;
     signin(signinDto: {
         username: string;
         password: string;
-    }): Promise<{
-        accessToken: string;
-    }> | undefined;
+    }): Promise<any> | undefined;
 }

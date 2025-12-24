@@ -29,15 +29,19 @@ let UserService = class UserService {
         return await db_1.db.select().from(db_1.users).where((0, db_1.eq)(db_1.users.username, username));
     }
     async signin(signInDto) {
-        const result = await db_1.db
-            .select()
-            .from(db_1.users)
-            .where((0, db_1.eq)(db_1.users.username, signInDto.username));
-        if (!bcryptjs_1.default.compareSync(signInDto.password, result[0].passwordHash)) {
-            throw new common_1.UnauthorizedException();
+        const user = await this.findOne(signInDto.username);
+        if (user.length === 0) {
+            throw new common_1.UnauthorizedException('Username not found');
         }
-        const payload = { sub: 'userId', username: 'placeholder_username' };
-        return { accessToken: await this.jwtService.signAsync(payload) };
+        if (!bcryptjs_1.default.compareSync(signInDto.password, user[0].passwordHash)) {
+            throw new common_1.UnauthorizedException('Incorrect Password');
+        }
+        const payload = { sub: user[0].id, username: user[0].username };
+        return {
+            accessToken: await this.jwtService.signAsync(payload),
+            username: user[0].username,
+            id: user[0].id,
+        };
     }
     async signup(signUpDto) {
         const existingUser = await this.findOne(signUpDto.username);
@@ -51,7 +55,11 @@ let UserService = class UserService {
         };
         const result = await db_1.db.insert(db_1.users).values(newUserEntry).returning();
         const payload = { sub: result[0].id, username: result[0].username };
-        return { accessToken: await this.jwtService.signAsync(payload) };
+        return {
+            accessToken: await this.jwtService.signAsync(payload),
+            username: result[0].username,
+            id: result[0].id,
+        };
     }
 };
 exports.UserService = UserService;
