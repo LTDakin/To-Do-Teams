@@ -34,7 +34,7 @@ let UserService = class UserService {
             throw new common_1.UnauthorizedException('Username not found');
         }
         if (!bcryptjs_1.default.compareSync(signInDto.password, user[0].passwordHash)) {
-            throw new common_1.UnauthorizedException('Incorrect Password');
+            throw new common_1.UnauthorizedException('Incorrect Credentials');
         }
         const payload = { sub: user[0].id, username: user[0].username };
         return {

@@ -31,7 +31,7 @@ export class UserService {
     }
 
     if (!bcrypt.compareSync(signInDto.password, user[0].passwordHash)) {
-      throw new UnauthorizedException('Incorrect Password');
+      throw new UnauthorizedException('Incorrect Credentials');
     }
 
     const payload = { sub: user[0].id, username: user[0].username };
