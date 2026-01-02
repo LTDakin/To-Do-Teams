@@ -1,0 +1,27 @@
+{
+  "name": "@team-do/db",
+  "version": "1.0.0",
+  "description": "drizzle postgres db client and schemas",
+  "license": "ISC",
+  "author": "Lloyd Dakin",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate": "drizzle-kit generate",
+    "migrate": "tsx ./migrate.ts",
+    "push": "npx drizzle-kit push",
+    "build": "tsc"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.16.0",
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
