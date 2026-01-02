@@ -1,6 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router";
 import { ConfigProvider } from "antd";
+import { ProtectedRoute } from "./ProtectedRouter";
 import LoginPage from "./Pages/login/login-page";
 import TodoPage from "./Pages/to-do-list/todo-list-page";
 
@@ -16,7 +17,14 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/todos" element={<TodoPage />} />
+          <Route
+            path="/todos"
+            element={
+              <ProtectedRoute>
+                <TodoPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </ConfigProvider>
     </>
