@@ -37,8 +37,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div>
-      <Card className="w-64" title="🗒️ Team-Do" variant="borderless">
+    <div className="flex justify-center items-center h-full">
+      <Card className="w-64 h-min" title="🗒️ Team-Do" variant="borderless">
         <Form form={form} onFinish={login}>
           <Form.Item
             name="username"
