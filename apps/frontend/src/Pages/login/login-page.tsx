@@ -1,39 +1,43 @@
 import { KeyOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input } from "antd";
 import { useNavigate } from "react-router";
+import { useSetAtom } from "jotai";
+import { userAtom } from "../../state/user";
 import { signin, signup } from "../../services/authService";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const setUser = useSetAtom(userAtom);
+
   type userDTO = { username: string; password: string };
   const [form] = Form.useForm();
 
   const login = async (credentials: userDTO): Promise<void> => {
     try {
-      await signin(credentials);
+      setUser(await signin(credentials));
       navigate("/todos");
     } catch (error) {
-      form.setFields([
-        {
-          name: "password",
-          errors: [String(error)],
-        },
-      ]);
+      setFormField(form, "password", [String(error)]);
     }
   };
 
   const createAccount = async (newCredentials: userDTO): Promise<void> => {
     try {
-      await signup(newCredentials);
+      setUser(await signup(newCredentials));
       navigate("/todos");
     } catch (error) {
-      form.setFields([
-        {
-          name: "username",
-          errors: [String(error)],
-        },
-      ]);
+      setFormField(form, "username", [String(error)]);
     }
+  };
+
+  // Helper to set antd form field error messages
+  const setFormField = (form: any, name: string, errors: string[]): void => {
+    form.setFields([
+      {
+        name: name,
+        errors: errors,
+      },
+    ]);
   };
 
   return (
