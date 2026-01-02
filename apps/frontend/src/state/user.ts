@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 
-const initialUser = {
+export const initialUser = {
   username: "",
   id: -1,
   accessToken: "",
