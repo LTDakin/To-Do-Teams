@@ -47,7 +47,7 @@ export default function TodoListPage() {
   ];
 
   return (
-    <div className="min-h-screen min-w-screen">
+    <div>
       <div className="flex justify-end items-center p-4">
         <Dropdown menu={{ items }}>
           <Space>
@@ -56,8 +56,15 @@ export default function TodoListPage() {
           </Space>
         </Dropdown>
       </div>
-      <h1>To-Do List</h1>
-      <TodoItem todo={samepleTodo} />
+      <div className="todos-container flex flex-col items-center gap-4">
+        <h1 className="todos-title">To-do's</h1>
+        <div className="todos-list w-96 flex flex-col gap-4">
+          <TodoItem todo={samepleTodo} />
+          <TodoItem todo={samepleTodo} />
+          <TodoItem todo={samepleTodo} />
+          <TodoItem todo={samepleTodo} />
+        </div>
+      </div>
     </div>
   );
 }

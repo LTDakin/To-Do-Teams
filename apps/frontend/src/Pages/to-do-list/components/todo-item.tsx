@@ -1,29 +1,35 @@
-import { Checkbox, CheckboxProps, Menu, MenuProps } from "antd";
-import { EllipsisOutlined } from "@ant-design/icons";
-import type { TodoDto } from "@team-do/types/index.js";
+import {
+  Checkbox,
+  CheckboxProps,
+  Dropdown,
+  Flex,
+  Button,
+  MenuProps,
+} from "antd";
+import {
+  MoreOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
 
 // Menu options for a todo
 type MenuItem = Required<MenuProps>["items"][number];
 const todoActionMenu: MenuItem[] = [
   {
-    key: "todo-actions",
-    children: [
-      {
-        key: "edit",
-        label: "Edit",
-        icon: null,
-      },
-      {
-        key: "delete",
-        label: "Delete",
-        icon: null,
-      },
-      {
-        key: "share",
-        label: "Share",
-        icon: null,
-      },
-    ],
+    key: "edit",
+    label: "Edit",
+    icon: <EditOutlined />,
+  },
+  {
+    key: "delete",
+    label: "Delete",
+    icon: <DeleteOutlined />,
+  },
+  {
+    key: "share",
+    label: "Share",
+    icon: <UserAddOutlined />,
   },
 ];
 
@@ -57,17 +63,25 @@ const menuClick: MenuProps["onClick"] = (e) => {
   }
 };
 
-export default function TodoItem({ todo }: { todo: TodoDto }) {
+export default function TodoItem({ todo }: any) {
   return (
-    <div className="text-teal-900">
+    <div className="flex items-center justify-between p-2 w-full">
+      {/* 1. Left Side: Checkbox and Title */}
       <Checkbox
-        className={todo.id}
         onChange={checkBoxChange}
         checked={todo.completed}
+        className={todo.completed ? "line-through text-gray-400" : ""}
       >
         {todo.title}
       </Checkbox>
-      <Menu onClick={menuClick} mode="vertical" items={todoActionMenu} />
+
+      {/* 2. Right Side: The Actions Menu */}
+      <Dropdown
+        menu={{ items: todoActionMenu, onClick: menuClick }}
+        trigger={["hover"]}
+      >
+        <Button type="text" icon={<MoreOutlined />} />
+      </Dropdown>
     </div>
   );
 }
