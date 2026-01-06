@@ -8,19 +8,15 @@ import {
   Delete,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
+import type { createTodoDto, updateTodoDto } from './dtos/todosDtos';
 
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  create(@Body() createTodoDto) {
+  create(@Body() createTodoDto: createTodoDto) {
     return this.todosService.create(createTodoDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.todosService.findAll();
   }
 
   @Get(':id')
@@ -29,7 +25,7 @@ export class TodosController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTodoDto) {
+  update(@Param('id') id: string, @Body() updateTodoDto: updateTodoDto) {
     return this.todosService.update(+id, updateTodoDto);
   }
 

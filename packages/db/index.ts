@@ -12,6 +12,13 @@ import {
 import "dotenv/config";
 
 export * from "drizzle-orm";
+/**
+ * When changing this file make sure to run from root
+ *  1. npm run update:db
+ *    uses drizzle-kit push to update the local development database with changes
+ *  2. npm run build:db
+ *    compiles the ts for the backend app to have the new tables/etc.
+ */
 
 // Schema that models the users table
 export const users = pgTable("users", {
@@ -35,7 +42,7 @@ export const todos = pgTable("todos", {
 });
 
 // Join table for User-to-User
-export const userSharesTable = pgTable(
+export const user_shares = pgTable(
   "user_shares",
   {
     sharerId: integer("sharer_id")
@@ -52,8 +59,8 @@ export const userSharesTable = pgTable(
 );
 
 // Join table for Todo-to-User
-export const todoSharesTable = pgTable(
-  "todo_shares",
+export const user_todos = pgTable(
+  "user_todos",
   {
     todoId: integer("todo_id")
       .notNull()
@@ -76,8 +83,8 @@ export const db = drizzle(pool, {
   schema: {
     users,
     todos,
-    userSharesTable,
-    todoSharesTable,
+    user_shares,
+    user_todos,
   },
   logger: true, // Optional: Enable logging for debugging
 });
