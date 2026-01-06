@@ -22,14 +22,14 @@ const todoActionMenu: MenuItem[] = [
     icon: <EditOutlined />,
   },
   {
-    key: "delete",
-    label: "Delete",
-    icon: <DeleteOutlined />,
-  },
-  {
     key: "share",
     label: "Share",
     icon: <UserAddOutlined />,
+  },
+  {
+    key: "delete",
+    label: "Delete",
+    icon: <DeleteOutlined />,
   },
 ];
 
@@ -52,11 +52,11 @@ const menuClick: MenuProps["onClick"] = (e) => {
     case "edit":
       console.log("Editing todo");
       break;
-    case "delete":
-      console.log("Deleting todo");
-      break;
     case "share":
       console.log("Sharing todo");
+      break;
+    case "delete":
+      console.log("Deleting todo");
       break;
     default:
       break;

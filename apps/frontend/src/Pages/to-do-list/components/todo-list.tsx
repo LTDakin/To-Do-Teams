@@ -1,5 +1,6 @@
 import { Button } from "antd";
 import TodoItem from "./todo-item";
+import { PlusOutlined } from "@ant-design/icons";
 
 export default function TodoList() {
   const samepleTodo = {
@@ -21,7 +22,12 @@ export default function TodoList() {
         <TodoItem todo={samepleTodo} />
         <TodoItem todo={samepleTodo} />
       </div>
-      <Button onClick={() => console.log("add todo clicked")}>Add Todo</Button>
+      <Button
+        icon={<PlusOutlined />}
+        onClick={() => console.log("add todo clicked")}
+      >
+        Add
+      </Button>
     </>
   );
 }
