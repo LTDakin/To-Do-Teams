@@ -8,7 +8,6 @@ export default function TodoList() {
     title: "Sample Todo",
     completed: false,
     ownerId: "12",
-    sharedWithUserIds: [],
     createdAt: new Date(),
     updatedAt: new Date(),
   };
