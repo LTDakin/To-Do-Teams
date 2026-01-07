@@ -7,4 +7,3 @@ export const initialUser = {
 };
 
 export const userAtom = atom(initialUser);
-export type UserAtom = typeof initialUser;

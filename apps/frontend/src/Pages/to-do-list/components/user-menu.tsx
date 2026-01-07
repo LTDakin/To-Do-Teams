@@ -7,12 +7,15 @@ import { Dropdown, MenuProps, Space } from "antd";
 import { useAtom } from "jotai";
 import { useNavigate } from "react-router";
 import { userAtom, initialUser } from "../../../state/user";
+import Cookies from "js-cookie";
 
 export default function UserMenu() {
   const [user, setUser] = useAtom(userAtom);
   const navigate = useNavigate();
 
+  // TODO move this out to a custom react hook, also change atom to useAtomReset
   function logout(): void {
+    Cookies.remove("access_token");
     setUser(initialUser);
     navigate("/");
   }
