@@ -4,13 +4,14 @@ import TodoItem from "./todo-item";
 import { PlusOutlined } from "@ant-design/icons";
 import { createTodo, findUsersTodos } from "../../../services/todosService";
 import { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useAtom } from "jotai";
 import { userAtom } from "../../../state/user";
+import { todosAtom } from "../../../state/todos";
 
 export default function TodoList() {
   const user = useAtomValue(userAtom);
+  const [todos, setTodos] = useAtom(todosAtom);
   const [todoInput, setTodoInput] = useState<string>("");
-  const [todos, setTodos] = useState<any[]>([]);
   const [todosLoading, setTodosLoading] = useState(false);
 
   async function loadTodos() {

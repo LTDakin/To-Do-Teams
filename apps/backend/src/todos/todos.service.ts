@@ -69,7 +69,7 @@ export class TodosService {
   async update(id: number, updateTodoDto: updateTodoDto) {
     const [todo] = await db
       .update(todos)
-      .set(updateTodoDto)
+      .set({ ...updateTodoDto, updatedAt: new Date() })
       .where(eq(todos.id, id))
       .returning();
 

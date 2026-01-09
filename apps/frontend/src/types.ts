@@ -1,7 +1,10 @@
 type todo = {
+  id: number;
   title: string;
   ownerId: number;
   completed: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 type createTodoDto = {
@@ -10,9 +13,9 @@ type createTodoDto = {
 };
 
 type updateTodoDto = {
-  title: string;
-  ownerId: number;
-  completed: boolean;
+  title?: string;
+  ownerId?: number;
+  completed?: boolean;
 };
 
 type user = {

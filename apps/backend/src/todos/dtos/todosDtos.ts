@@ -4,9 +4,9 @@ type createTodoDto = {
 };
 
 type updateTodoDto = {
-  title: string;
-  ownerId: number;
-  completed: boolean;
+  title?: string;
+  ownerId?: number;
+  completed?: boolean;
 };
 
 export type { createTodoDto, updateTodoDto };
