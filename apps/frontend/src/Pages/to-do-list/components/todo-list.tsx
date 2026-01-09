@@ -2,27 +2,46 @@ import { Button, Card, Input } from "antd";
 const { TextArea } = Input;
 import TodoItem from "./todo-item";
 import { PlusOutlined } from "@ant-design/icons";
-import { createTodo } from "../../../services/todosService";
-import { useState } from "react";
+import { createTodo, findUsersTodos } from "../../../services/todosService";
+import { useEffect, useState } from "react";
 import { useAtomValue } from "jotai";
 import { userAtom } from "../../../state/user";
 
 export default function TodoList() {
   const user = useAtomValue(userAtom);
-  const [newTodo, setNewTodo] = useState<string>("");
+  const [todoInput, setTodoInput] = useState<string>("");
   const [todos, setTodos] = useState<any[]>([]);
+  const [todosLoading, setTodosLoading] = useState(false);
+
+  async function loadTodos() {
+    if (!user?.id) return;
+
+    try {
+      setTodosLoading(true);
+      const data = await findUsersTodos(user.id);
+      console.log(data);
+      setTodos(data);
+    } catch (error) {
+      console.error("Failed to fetch todos:", error);
+    } finally {
+      setTodosLoading(false);
+    }
+  }
 
   async function createNewTodo() {
     try {
-      console.log("Creating new todo:", { title: newTodo, ownerId: user.id });
-      console.log(await createTodo({ title: newTodo, ownerId: user.id }));
-
-      setNewTodo("");
+      await createTodo({ title: todoInput, ownerId: user.id });
+      setTodoInput("");
+      await loadTodos();
     } catch (error) {
       // TODO set the error message on the textarea
       console.error("Failed to create todo:", error);
     }
   }
+
+  useEffect(() => {
+    loadTodos();
+  }, [user?.id]);
 
   return (
     <Card title="To-do's" className="w-fit">
@@ -30,8 +49,8 @@ export default function TodoList() {
         <Button icon={<PlusOutlined />} onClick={createNewTodo} />
         <TextArea
           autoSize
-          value={newTodo}
-          onChange={(e) => setNewTodo(e.target.value)}
+          value={todoInput}
+          onChange={(e) => setTodoInput(e.target.value)}
           onPressEnter={createNewTodo}
         />
       </div>
@@ -39,7 +58,7 @@ export default function TodoList() {
         {todos.length === 0 ? (
           <p>You're have nothing todo!</p>
         ) : (
-          todos.map((item) => <TodoItem key={item.id} todo={item} />)
+          todos.map((td) => <TodoItem key={td.id} todo={td} />)
         )}
       </div>
     </Card>

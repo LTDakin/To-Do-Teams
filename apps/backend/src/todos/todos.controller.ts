@@ -24,6 +24,11 @@ export class TodosController {
     return this.todosService.findOne(+id);
   }
 
+  @Get('user/:userId')
+  findUsersTodos(@Param('userId') userId: string) {
+    return this.todosService.findUsersTodos(+userId);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTodoDto: updateTodoDto) {
     return this.todosService.update(+id, updateTodoDto);

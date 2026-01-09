@@ -40,6 +40,22 @@ export class TodosService {
     });
   }
 
+  async findUsersTodos(userId: number): Promise<any[]> {
+    return await db
+      .select({
+        // Otherwise select returns the joined table
+        id: todos.id,
+        title: todos.title,
+        completed: todos.completed,
+        ownerId: todos.ownerId,
+        createdAt: todos.createdAt,
+        updatedAt: todos.updatedAt,
+      })
+      .from(todos)
+      .innerJoin(user_todos, eq(todos.id, user_todos.todoId))
+      .where(eq(user_todos.userId, userId));
+  }
+
   async findOne(id: number) {
     const [todo] = await db.select().from(todos).where(eq(todos.id, id));
 

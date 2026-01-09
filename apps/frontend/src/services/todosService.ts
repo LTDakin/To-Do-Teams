@@ -23,7 +23,11 @@ function deleteTodo(id: number): Promise<any> {
 }
 
 function findUsersTodos(userId: number): Promise<any> {
-  return api.get(`${todosEndpoint}?userId=${userId}`);
+  return api.get(`${todosEndpoint}/user/${userId}`);
 }
 
-export { createTodo, findUsersTodos, patchTodo, deleteTodo };
+function findOneTodo(id: number): Promise<any> {
+  return api.get(`${todosEndpoint}/${id}`);
+}
+
+export { createTodo, findUsersTodos, patchTodo, deleteTodo, findOneTodo };
