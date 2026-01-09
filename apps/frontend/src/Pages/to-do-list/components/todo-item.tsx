@@ -5,12 +5,13 @@ import {
   DeleteOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
-import { useAtom } from "jotai";
+import { useSetAtom } from "jotai";
 import { todosAtom } from "../../../state/todos";
 import { patchTodo } from "../../../services/todosService";
+import { updateTodoDto } from "../../../types";
 
 export default function TodoItem({ todo }: any) {
-  const [todos, setTodos] = useAtom(todosAtom);
+  const setTodos = useSetAtom(todosAtom);
 
   // Menu options for a todo
   type MenuItem = Required<MenuProps>["items"][number];
@@ -32,6 +33,17 @@ export default function TodoItem({ todo }: any) {
     },
   ];
 
+  // Helper function for Editing and Checking/Unchecking a Todo (Patches)
+  async function updateTodoField(field: keyof updateTodoDto, newValue: any) {
+    setTodos((prevTodos) =>
+      prevTodos.map((td) =>
+        td.id === todo.id ? { ...td, [field]: newValue } : td
+      )
+    );
+
+    await patchTodo(todo.id, { [field]: newValue });
+  }
+
   const menuClick: MenuProps["onClick"] = (e) => {
     switch (e.key) {
       case "edit":
@@ -48,17 +60,9 @@ export default function TodoItem({ todo }: any) {
     }
   };
 
-  const checkBoxChange: CheckboxProps["onChange"] = async (e) => {
+  const checkBoxChange: CheckboxProps["onChange"] = (e) => {
     try {
-      const newValue: boolean = e.target.checked;
-
-      setTodos((prevTodos) =>
-        prevTodos.map((td) =>
-          td.id === todo.id ? { ...td, completed: newValue } : td
-        )
-      );
-
-      await patchTodo(todo.id, { completed: newValue });
+      updateTodoField("completed", e.target.checked);
     } catch (error) {
       console.error("Failed to update todo:", error);
     }
