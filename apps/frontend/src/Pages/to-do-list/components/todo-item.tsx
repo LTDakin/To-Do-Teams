@@ -1,11 +1,4 @@
-import {
-  Checkbox,
-  CheckboxProps,
-  Dropdown,
-  Flex,
-  Button,
-  MenuProps,
-} from "antd";
+import { Checkbox, CheckboxProps, Dropdown, Button, MenuProps } from "antd";
 import {
   MoreOutlined,
   EditOutlined,
@@ -35,8 +28,6 @@ const todoActionMenu: MenuItem[] = [
 
 // Checkbox check/uncheck handler, change matching todo item in atom
 const checkBoxChange: CheckboxProps["onChange"] = (e) => {
-  console.log(`checked = ${e.target.checked}`);
-
   if (e.target.checked) {
     // Send PUT request to mark todo as completed to server
     console.log("Marking todo as completed");
