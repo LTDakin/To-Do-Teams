@@ -31,6 +31,8 @@ export class TodosService {
           todoId: newTodo.id,
           userId: createTodoDto.ownerId,
         });
+
+        return newTodo;
       } catch (error) {
         console.log('Failed to insert todo or user_todo', error);
         throw new InternalServerErrorException('Could not save your Todo');

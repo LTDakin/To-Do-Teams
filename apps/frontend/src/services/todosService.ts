@@ -3,6 +3,14 @@ import { createTodoDto, updateTodoDto } from "../types";
 const todosEndpoint = "todos";
 
 function createTodo(todo: createTodoDto): Promise<any> {
+  if (todo.title?.trim() === "") {
+    throw new Error("New todo is empty");
+  }
+
+  if (todo.ownerId === undefined) {
+    throw new Error("User is undefined");
+  }
+
   return api.post(todosEndpoint, todo);
 }
 
