@@ -116,12 +116,7 @@ export default function TodoItem({ todo }: any) {
             onBlur={handleTitleSubmit} // Saves if user clicks away
           />
         ) : (
-          <span
-            className={`ml-2 cursor-pointer ${todo.completed ? "line-through text-gray-400" : ""}`}
-            onDoubleClick={() => setIsEditing(true)}
-          >
-            {todo.title}
-          </span>
+          <>{todo.title}</>
         )}
       </Checkbox>
 
