@@ -7,7 +7,7 @@ import {
 } from "@ant-design/icons";
 import { useSetAtom } from "jotai";
 import { todosAtom } from "../../../state/todos";
-import { patchTodo } from "../../../services/todosService";
+import { patchTodo, deleteTodo } from "../../../services/todosService";
 import { updateTodoDto } from "../../../types";
 
 export default function TodoItem({ todo }: any) {
@@ -33,15 +33,19 @@ export default function TodoItem({ todo }: any) {
     },
   ];
 
-  // Helper function for Editing and Checking/Unchecking a Todo (Patches)
-  async function updateTodoField(field: keyof updateTodoDto, newValue: any) {
+  function handlePatch(field: keyof updateTodoDto, newValue: any) {
     setTodos((prevTodos) =>
       prevTodos.map((td) =>
         td.id === todo.id ? { ...td, [field]: newValue } : td
       )
     );
 
-    await patchTodo(todo.id, { [field]: newValue });
+    patchTodo(todo.id, { [field]: newValue });
+  }
+
+  function handleDelete() {
+    setTodos((prevTodos) => prevTodos.filter((item) => item.id !== todo.id));
+    deleteTodo(todo.id);
   }
 
   const menuClick: MenuProps["onClick"] = (e) => {
@@ -53,7 +57,7 @@ export default function TodoItem({ todo }: any) {
         console.log("Sharing todo");
         break;
       case "delete":
-        console.log("Deleting todo");
+        handleDelete();
         break;
       default:
         break;
@@ -62,7 +66,7 @@ export default function TodoItem({ todo }: any) {
 
   const checkBoxChange: CheckboxProps["onChange"] = (e) => {
     try {
-      updateTodoField("completed", e.target.checked);
+      handlePatch("completed", e.target.checked);
     } catch (error) {
       console.error("Failed to update todo:", error);
     }
