@@ -1,21 +1,31 @@
-## To-Do Teams
+# To-Do Teams
 
 Project to get practice with Nest.Js, Typescript, React, and managing authorization of shared data.
 
-Frontend: React-Router
-Backend: Nest.js (An Express.js wrapper)
-Shared: Typescript, Zod
+### Frontend
+  - Framework: React
+  - Routing: React-router
+  - Component Library: Antd
+  - State Management: Jotai
+### Backend:
+  - Framework: NestJs
+  - Type ORM: Drizzle
+  - Database: PostgresQL
 
-To run the project in dev mode:
+## To run the project:
+1. First start a docker container running a PostgresQL with matching credentials
+2. Build and push migrations using drizzle-kit for the db
 ```
-npm run start:all
+npm run build:db
+npm run update:db
 ```
-To run only the frontend or backend:
+3. Start the backend and frontend servers
 ```
 npm run start:fe
 npm run start:be
 ```
-Main Features:
+
+## Main Features:
 - Account Creation & Management
 - Todos persisted in Database
 - Share Todos with other users
