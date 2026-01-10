@@ -1,4 +1,11 @@
-import { Checkbox, CheckboxProps, Dropdown, Button, MenuProps } from "antd";
+import {
+  Checkbox,
+  CheckboxProps,
+  Dropdown,
+  Button,
+  MenuProps,
+  Input,
+} from "antd";
 import {
   MoreOutlined,
   EditOutlined,
@@ -9,9 +16,13 @@ import { useSetAtom } from "jotai";
 import { todosAtom } from "../../../state/todos";
 import { patchTodo, deleteTodo } from "../../../services/todosService";
 import { updateTodoDto } from "../../../types";
+import { useEffect, useRef, useState } from "react";
 
 export default function TodoItem({ todo }: any) {
   const setTodos = useSetAtom(todosAtom);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(todo.title);
+  const inputRef = useRef<any>(null);
 
   // Menu options for a todo
   type MenuItem = Required<MenuProps>["items"][number];
@@ -43,6 +54,13 @@ export default function TodoItem({ todo }: any) {
     patchTodo(todo.id, { [field]: newValue });
   }
 
+  const handleTitleSubmit = () => {
+    if (editText.trim() !== todo.title) {
+      handlePatch("title", editText);
+    }
+    setIsEditing(false);
+  };
+
   function handleDelete() {
     setTodos((prevTodos) => prevTodos.filter((item) => item.id !== todo.id));
     deleteTodo(todo.id);
@@ -51,7 +69,7 @@ export default function TodoItem({ todo }: any) {
   const menuClick: MenuProps["onClick"] = (e) => {
     switch (e.key) {
       case "edit":
-        console.log("Editing todo");
+        setIsEditing(true);
         break;
       case "share":
         console.log("Sharing todo");
@@ -72,6 +90,13 @@ export default function TodoItem({ todo }: any) {
     }
   };
 
+  // Autofocus the index once isEditing
+  useEffect(() => {
+    if (isEditing) {
+      inputRef.current?.focus();
+    }
+  }, [isEditing]);
+
   return (
     <div className="flex items-center justify-between p-2 w-full">
       {/* 1. Left Side: Checkbox and Title */}
@@ -80,7 +105,24 @@ export default function TodoItem({ todo }: any) {
         checked={todo.completed}
         className={todo.completed ? "line-through text-gray-400" : ""}
       >
-        {todo.title}
+        {isEditing ? (
+          <Input.TextArea
+            ref={inputRef}
+            className="ml-2"
+            autoSize
+            value={editText}
+            onChange={(e) => setEditText(e.target.value)}
+            onPressEnter={handleTitleSubmit}
+            onBlur={handleTitleSubmit} // Saves if user clicks away
+          />
+        ) : (
+          <span
+            className={`ml-2 cursor-pointer ${todo.completed ? "line-through text-gray-400" : ""}`}
+            onDoubleClick={() => setIsEditing(true)}
+          >
+            {todo.title}
+          </span>
+        )}
       </Checkbox>
 
       {/* 2. Right Side: The Actions Menu */}
