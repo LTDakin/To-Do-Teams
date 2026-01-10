@@ -15,7 +15,6 @@ import type {
   ShareTodoDto,
 } from '../dtos/todosDtos';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('todos')
 export class TodosController {
@@ -23,11 +22,8 @@ export class TodosController {
 
   @Post()
   @UseGuards(AuthGuard)
-  create(
-    @Body() createTodoDto: createTodoDto,
-    @GetUser('sub') ownerId: number,
-  ) {
-    return this.todosService.create({ ...createTodoDto, ownerId: ownerId });
+  create(@Body() createTodoDto: createTodoDto) {
+    return this.todosService.create(createTodoDto);
   }
 
   @Post('share')
