@@ -12,7 +12,7 @@ import type {
   createTodoDto,
   updateTodoDto,
   ShareTodoDto,
-} from './dtos/todosDtos';
+} from '../dtos/todosDtos';
 
 @Controller('todos')
 export class TodosController {

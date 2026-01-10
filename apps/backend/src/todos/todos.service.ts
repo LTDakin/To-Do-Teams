@@ -8,7 +8,7 @@ import type {
   createTodoDto,
   ShareTodoDto,
   updateTodoDto,
-} from './dtos/todosDtos';
+} from '../dtos/todosDtos';
 import { UserService } from 'src/user/user.service';
 
 // TODO ensure only owners can create/edit/delete their own todos, how to verify this?
