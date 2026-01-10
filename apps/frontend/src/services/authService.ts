@@ -1,14 +1,17 @@
 // Auth Service for handling sign-in, sign-out, user session management, user retrieval, and account creation/deletion.
-import { UserAtom } from "../state/user";
-import { postData } from "../utils/httpClient";
+import { api } from "./httpClient";
+import type { user } from "../types";
+import Cookies from "js-cookie";
 const userEndpoint = "user";
 
-async function signin(credentials: {
-  username: string;
-  password: string;
-}): Promise<UserAtom> {
-  const response = await postData(userEndpoint + "/signin", credentials);
-  // update user atom with credentials
+async function signin(credentials: any): Promise<user> {
+  const response = await api.post(userEndpoint + "/signin", credentials);
+
+  Cookies.set("access_token", response.accessToken, {
+    secure: true,
+    sameSite: "strict",
+  });
+
   return {
     username: response.username,
     id: response.id,
@@ -16,9 +19,14 @@ async function signin(credentials: {
   };
 }
 
-async function signup(newAccountData: any): Promise<UserAtom> {
-  const response = await postData(userEndpoint + "/signup", newAccountData);
-  // update user atom with credentials
+async function signup(newAccountData: any): Promise<user> {
+  const response = await api.post(userEndpoint + "/signup", newAccountData);
+
+  Cookies.set("access_token", response.accessToken, {
+    secure: true,
+    sameSite: "strict",
+  });
+
   return {
     username: response.username,
     id: response.id,

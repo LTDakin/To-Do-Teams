@@ -35,7 +35,7 @@ export const todos = pgTable("todos", {
   title: text("title").notNull(),
   completed: boolean("completed").default(false).notNull(),
   ownerId: integer("owner_id")
-    .references(() => users.id)
+    .references(() => users.id, { onDelete: "cascade" })
     .notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -47,10 +47,10 @@ export const user_shares = pgTable(
   {
     sharerId: integer("sharer_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
     shareeId: integer("sharee_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
   },
   (table) => [
     // ensures we have no duplicate relationships in the table by creating a composite primary key
@@ -64,10 +64,10 @@ export const user_todos = pgTable(
   {
     todoId: integer("todo_id")
       .notNull()
-      .references(() => todos.id),
+      .references(() => todos.id, { onDelete: "cascade" }),
     userId: integer("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, { onDelete: "cascade" }),
   },
   (table) => [
     // ensures we have no duplicate relationships in the table by creating a composite primary key

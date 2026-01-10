@@ -1,10 +1,13 @@
-import { atom } from "jotai";
+import { atomWithStorage } from "jotai/utils";
 
-export const initialUser = {
+export interface UserData {
+  username: string;
+  id: number;
+}
+
+export const initialUser: UserData = {
   username: "",
   id: -1,
-  accessToken: "",
 };
 
-export const userAtom = atom(initialUser);
-export type UserAtom = typeof initialUser;
+export const userAtom = atomWithStorage<UserData>("user-data", initialUser);
