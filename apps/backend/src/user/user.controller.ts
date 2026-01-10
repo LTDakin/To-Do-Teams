@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthenticationGuard } from 'src/auth/authentication.guard';
 
 // /user endpoint
 @Controller('user')
@@ -8,7 +8,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthenticationGuard)
   find(@Query('id') id?: string, @Query('username') username?: string) {
     if (id) {
       return this.userService.findById(+id);

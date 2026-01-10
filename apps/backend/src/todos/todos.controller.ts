@@ -14,24 +14,27 @@ import type {
   updateTodoDto,
   ShareTodoDto,
 } from '../dtos/todosDtos';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthenticationGuard } from 'src/auth/authentication.guard';
+import { TodoAccessGuard } from 'src/auth/todo.authorization.guard';
 
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthenticationGuard)
   create(@Body() createTodoDto: createTodoDto) {
     return this.todosService.create(createTodoDto);
   }
 
   @Post('share')
+  @UseGuards(AuthenticationGuard)
   share(@Body() shareTodoDto: ShareTodoDto) {
     return this.todosService.share(shareTodoDto);
   }
 
   @Get(':id')
+  @UseGuards(AuthenticationGuard, TodoAccessGuard)
   findOne(@Param('id') id: string) {
     return this.todosService.findOne(+id);
   }
@@ -42,11 +45,13 @@ export class TodosController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthenticationGuard, TodoAccessGuard)
   update(@Param('id') id: string, @Body() updateTodoDto: updateTodoDto) {
     return this.todosService.update(+id, updateTodoDto);
   }
 
   @Delete(':id')
+  @UseGuards(AuthenticationGuard, TodoAccessGuard)
   remove(@Param('id') id: string) {
     return this.todosService.remove(+id);
   }
