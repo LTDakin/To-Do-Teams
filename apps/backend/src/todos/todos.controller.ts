@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import type {
@@ -13,14 +14,20 @@ import type {
   updateTodoDto,
   ShareTodoDto,
 } from '../dtos/todosDtos';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('todos')
 export class TodosController {
   constructor(private readonly todosService: TodosService) {}
 
   @Post()
-  create(@Body() createTodoDto: createTodoDto) {
-    return this.todosService.create(createTodoDto);
+  @UseGuards(AuthGuard)
+  create(
+    @Body() createTodoDto: createTodoDto,
+    @GetUser('sub') ownerId: number,
+  ) {
+    return this.todosService.create({ ...createTodoDto, ownerId: ownerId });
   }
 
   @Post('share')

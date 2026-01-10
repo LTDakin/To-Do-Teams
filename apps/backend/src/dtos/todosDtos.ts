@@ -11,7 +11,7 @@ type updateTodoDto = {
 
 type ShareTodoDto = {
   todoId: number;
-  userId: number;
+  ownerId: number;
   shareeName: string;
 };
 

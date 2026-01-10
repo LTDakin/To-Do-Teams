@@ -64,7 +64,7 @@ export class TodosService {
 
       // 3. Record the share relationship
       await tx.insert(user_shares).values({
-        sharerId: shareTodoDto.userId,
+        sharerId: shareTodoDto.ownerId,
         shareeId: sharee.id,
       });
     });
