@@ -3,12 +3,18 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { todos, user_todos, db, eq } from '@team-do/db';
-import type { createTodoDto, updateTodoDto } from './dtos/todosDtos';
+import { todos, user_todos, user_shares, db, eq } from '@team-do/db';
+import type {
+  createTodoDto,
+  ShareTodoDto,
+  updateTodoDto,
+} from './dtos/todosDtos';
+import { UserService } from 'src/user/user.service';
 
 // TODO ensure only owners can create/edit/delete their own todos, how to verify this?
 @Injectable()
 export class TodosService {
+  constructor(private readonly userService: UserService) {}
   async create(createTodoDto: createTodoDto): Promise<any> {
     // Use transaction since we want to insert into two tables or not at all
     return await db.transaction(async (tx) => {
@@ -37,6 +43,30 @@ export class TodosService {
         console.log('Failed to insert todo or user_todo', error);
         throw new InternalServerErrorException('Could not save your Todo');
       }
+    });
+  }
+
+  async share(shareTodoDto: ShareTodoDto): Promise<any> {
+    const [sharee] = await this.userService.findByUsername(
+      shareTodoDto.shareeName,
+    );
+    if (!sharee)
+      throw new NotFoundException(
+        `No Users with the name ${shareTodoDto.shareeName}`,
+      );
+
+    return await db.transaction(async (tx) => {
+      // 2. Give the user access
+      await tx.insert(user_todos).values({
+        todoId: shareTodoDto.todoId,
+        userId: sharee.id,
+      });
+
+      // 3. Record the share relationship
+      await tx.insert(user_shares).values({
+        sharerId: shareTodoDto.userId,
+        shareeId: sharee.id,
+      });
     });
   }
 

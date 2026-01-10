@@ -9,4 +9,10 @@ type updateTodoDto = {
   completed?: boolean;
 };
 
-export type { createTodoDto, updateTodoDto };
+type ShareTodoDto = {
+  todoId: number;
+  userId: number;
+  shareeName: string;
+};
+
+export type { createTodoDto, updateTodoDto, ShareTodoDto };

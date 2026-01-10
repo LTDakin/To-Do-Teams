@@ -5,6 +5,7 @@ import {
   Button,
   MenuProps,
   Input,
+  Modal,
 } from "antd";
 import {
   MoreOutlined,
@@ -12,17 +13,26 @@ import {
   DeleteOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
-import { useSetAtom } from "jotai";
+import { useSetAtom, useAtomValue } from "jotai";
+import { userAtom } from "../../../state/user";
 import { todosAtom } from "../../../state/todos";
-import { patchTodo, deleteTodo } from "../../../services/todosService";
+import {
+  patchTodo,
+  deleteTodo,
+  shareTodo,
+} from "../../../services/todosService";
 import { updateTodoDto } from "../../../types";
 import { useEffect, useRef, useState } from "react";
 
 export default function TodoItem({ todo }: any) {
   const setTodos = useSetAtom(todosAtom);
+  const user = useAtomValue(userAtom);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.title);
   const inputRef = useRef<any>(null);
+  // Share Modal
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [shareText, setShareText] = useState("");
 
   // Menu options for a todo
   type MenuItem = Required<MenuProps>["items"][number];
@@ -54,16 +64,22 @@ export default function TodoItem({ todo }: any) {
     patchTodo(todo.id, { [field]: newValue });
   }
 
-  const handleTitleSubmit = () => {
+  function handleTitleSubmit() {
     if (editText.trim() !== todo.title) {
       handlePatch("title", editText);
     }
     setIsEditing(false);
-  };
+  }
 
   function handleDelete() {
     setTodos((prevTodos) => prevTodos.filter((item) => item.id !== todo.id));
     deleteTodo(todo.id);
+  }
+
+  function handleShareSubmit() {
+    setIsShareModalOpen(false);
+    shareTodo({ todoId: todo.id, userId: user.id, shareeName: shareText });
+    setShareText("");
   }
 
   const menuClick: MenuProps["onClick"] = (e) => {
@@ -72,7 +88,7 @@ export default function TodoItem({ todo }: any) {
         setIsEditing(true);
         break;
       case "share":
-        console.log("Sharing todo");
+        setIsShareModalOpen(true);
         break;
       case "delete":
         handleDelete();
@@ -127,6 +143,21 @@ export default function TodoItem({ todo }: any) {
       >
         <Button type="text" icon={<MoreOutlined />} />
       </Dropdown>
+      {/* 3. Pop up: Sharing modal */}
+      <Modal
+        title="Share Todo"
+        closable={{ "aria-label": "Custom Close Button" }}
+        open={isShareModalOpen}
+        onOk={handleShareSubmit}
+        onCancel={() => setIsShareModalOpen(false)}
+      >
+        <Input.TextArea
+          autoSize
+          value={shareText}
+          onChange={(e) => setShareText(e.target.value)}
+          onPressEnter={handleShareSubmit}
+        />
+      </Modal>
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { api } from "./httpClient";
-import { createTodoDto, updateTodoDto } from "../types";
+import { createTodoDto, updateTodoDto, shareTodoDto } from "../types";
 const todosEndpoint = "todos";
 
 function createTodo(todo: createTodoDto): Promise<any> {
@@ -30,4 +30,15 @@ function findOneTodo(id: number): Promise<any> {
   return api.get(`${todosEndpoint}/${id}`);
 }
 
-export { createTodo, findUsersTodos, patchTodo, deleteTodo, findOneTodo };
+function shareTodo(share: shareTodoDto): Promise<any> {
+  return api.post(`${todosEndpoint}/share/`, share);
+}
+
+export {
+  createTodo,
+  findUsersTodos,
+  patchTodo,
+  deleteTodo,
+  findOneTodo,
+  shareTodo,
+};

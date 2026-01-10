@@ -18,10 +18,16 @@ type updateTodoDto = {
   completed?: boolean;
 };
 
+type shareTodoDto = {
+  todoId: number;
+  userId: number;
+  shareeName: string;
+};
+
 type user = {
   username: string;
   id: number;
   accessToken: string;
 };
 
-export type { todo, createTodoDto, updateTodoDto, user };
+export type { todo, createTodoDto, updateTodoDto, user, shareTodoDto };

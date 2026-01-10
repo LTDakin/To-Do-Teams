@@ -20,7 +20,6 @@ export default function TodoList() {
     try {
       setTodosLoading(true);
       const data = await findUsersTodos(user.id);
-      console.log(data);
       setTodos(data);
     } catch (error) {
       console.error("Failed to fetch todos:", error);

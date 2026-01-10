@@ -17,14 +17,18 @@ export class UserService {
     return db.select().from(users);
   }
 
-  async findOne(username: string) {
+  async findById(id: number) {
+    return await db.select().from(users).where(eq(users.id, id));
+  }
+
+  async findByUsername(username: string) {
     return await db.select().from(users).where(eq(users.username, username));
   }
 
   // TODO user a proper dto type for return
   async signin(signInDto: signInDto): Promise<any> {
     // Query for user with username
-    const [user] = await this.findOne(signInDto.username);
+    const [user] = await this.findByUsername(signInDto.username);
 
     if (!user) {
       throw new UnauthorizedException('Username not found');
@@ -46,7 +50,7 @@ export class UserService {
   // TODO user a proper dto type for return
   async signup(signUpDto: signInDto): Promise<any> {
     // We don't allow two users with the same username
-    const [existingUser] = await this.findOne(signUpDto.username);
+    const [existingUser] = await this.findByUsername(signUpDto.username);
 
     if (existingUser) {
       throw new UnauthorizedException('Username already exists');
