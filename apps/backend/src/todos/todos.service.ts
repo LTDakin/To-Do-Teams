@@ -8,7 +8,7 @@ import type {
   createTodoDto,
   ShareTodoDto,
   updateTodoDto,
-} from './dtos/todosDtos';
+} from '../dtos/todosDtos';
 import { UserService } from 'src/user/user.service';
 
 // TODO ensure only owners can create/edit/delete their own todos, how to verify this?
@@ -57,16 +57,26 @@ export class TodosService {
 
     return await db.transaction(async (tx) => {
       // 2. Give the user access
-      await tx.insert(user_todos).values({
-        todoId: shareTodoDto.todoId,
-        userId: sharee.id,
-      });
+      await tx
+        .insert(user_todos)
+        .values({
+          todoId: shareTodoDto.todoId,
+          userId: sharee.id,
+        })
+        .onConflictDoNothing({
+          target: [user_todos.todoId, user_todos.userId],
+        });
 
       // 3. Record the share relationship
-      await tx.insert(user_shares).values({
-        sharerId: shareTodoDto.userId,
-        shareeId: sharee.id,
-      });
+      await tx
+        .insert(user_shares)
+        .values({
+          sharerId: shareTodoDto.ownerId,
+          shareeId: sharee.id,
+        })
+        .onConflictDoNothing({
+          target: [user_shares.sharerId, user_shares.shareeId],
+        });
     });
   }
 

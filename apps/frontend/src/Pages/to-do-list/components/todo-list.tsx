@@ -2,7 +2,7 @@ import { Button, Card, Input } from "antd";
 const { TextArea } = Input;
 import TodoItem from "./todo-item";
 import { PlusOutlined } from "@ant-design/icons";
-import { createTodo, findUsersTodos } from "../../../services/todosService";
+import { createTodo, findMyTodos } from "../../../services/todosService";
 import { useEffect, useState } from "react";
 import { useAtomValue, useAtom } from "jotai";
 import { userAtom } from "../../../state/user";
@@ -19,7 +19,7 @@ export default function TodoList() {
 
     try {
       setTodosLoading(true);
-      const data = await findUsersTodos(user.id);
+      const data = await findMyTodos();
       setTodos(data);
     } catch (error) {
       console.error("Failed to fetch todos:", error);

@@ -22,8 +22,8 @@ function deleteTodo(id: number): Promise<any> {
   return api.delete(`${todosEndpoint}/${id}`);
 }
 
-function findUsersTodos(userId: number): Promise<any> {
-  return api.get(`${todosEndpoint}/user/${userId}`);
+function findMyTodos(): Promise<any> {
+  return api.get(`${todosEndpoint}/user/me`);
 }
 
 function findOneTodo(id: number): Promise<any> {
@@ -36,7 +36,7 @@ function shareTodo(share: shareTodoDto): Promise<any> {
 
 export {
   createTodo,
-  findUsersTodos,
+  findMyTodos,
   patchTodo,
   deleteTodo,
   findOneTodo,
